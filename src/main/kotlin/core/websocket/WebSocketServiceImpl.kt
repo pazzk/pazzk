@@ -1,4 +1,4 @@
-package io.pazzk.websocket
+package io.pazzk.core.websocket
 
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
