@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 class WebSocketServiceImpl(
-    private val uri: String, private val auth: String,
+    private val url: String, private val auth: String,
     private val scope: CoroutineScope
 ) : WebSocketService {
     private val logger = LoggerFactory.getLogger(this.javaClass)
@@ -30,14 +30,14 @@ class WebSocketServiceImpl(
     }
 
     private suspend fun connectAndReceive() {
-        val url = "$uri/socket.io/?auth=$auth&EIO=3&transport=websocket"
+        val webSocketUrl = "$url/socket.io/?auth=$auth&EIO=3&transport=websocket"
         if (logger.isDebugEnabled) {
-            logger.debug("Connect to {}", url)
+            logger.debug("Connect to {}", webSocketUrl)
         }
 
         try {
             client.webSocket(request = {
-                url(url)
+                url(webSocketUrl)
             }) {
                 for (frame in incoming) {
                     if (frame is Frame.Text) {
@@ -64,7 +64,7 @@ class WebSocketServiceImpl(
         }
     }
 
-    override suspend fun disconnect() {
+    override fun disconnect() {
         messageChannel.close()
         client.close()
     }
