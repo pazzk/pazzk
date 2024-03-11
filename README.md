@@ -8,24 +8,24 @@
 ## How To Use
 
 ```kotlin
-val pazzk = Pazzk("YOUR_DONATE_KEY")
+// donation@YOUR_DONATE_KEY
+val pazzk = Pazzk.pazzk("YOUR_DONATE_KEY", this)
+pazzk.addListener {context ->
+    when (context) {
+        is Connection     -> {
+            println("Connect success!")
+        }
 
-pazzk.addListener { response ->
-    if (response.isMessage) {
-        // which is websocket message
-        // such as connect, disconnect, error, etc...
-        println("$response.message")
-    }
-    else {
-        // which only for donate event
-        println("$reponse.amount 원 후원")
+        is Error      -> {
+            println("Error occurs! ${context.reason}")
+        }
+
+        is Donate -> {
+            println("Thanks for ${context.payAmount}₩ donate!")
+        }
     }
 }
-
 pazzk.connect()
-
-// something later...
-
+delay(1000 * 60)
 pazzk.disconnect()
 ```
-
