@@ -3,7 +3,7 @@ package io.pazzk
 import io.pazzk.core.webclient.WebClientService
 import io.pazzk.core.websocket.WebSocketService
 import io.pazzk.core.websocket.WebSocketServiceImpl
-import io.pazzk.json.Session
+import io.pazzk.utils.Session
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

@@ -43,9 +43,6 @@ class WebSocketServiceImpl(
                     if (frame is Frame.Text) {
                         messageChannel.send(frame.readText())
                     }
-                    else if (frame is Frame.Binary) {
-                        messageChannel.send(String(frame.readBytes()))
-                    }
                 }
             }
             if (logger.isDebugEnabled) {

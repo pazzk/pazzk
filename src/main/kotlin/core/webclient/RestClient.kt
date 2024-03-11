@@ -4,7 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.pazzk.core.webclient.WebClientService.Companion.DEFAULT_CLIENT
-import io.pazzk.json.Session
+import io.pazzk.utils.Session
 import org.slf4j.LoggerFactory
 
 class RestClient(
