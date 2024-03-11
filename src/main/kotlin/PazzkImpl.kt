@@ -3,6 +3,7 @@ package io.pazzk
 import io.pazzk.core.webclient.WebClientService
 import io.pazzk.core.websocket.WebSocketService
 import io.pazzk.core.websocket.WebSocketServiceImpl
+import io.pazzk.utils.Context
 import io.pazzk.utils.Session
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ class PazzkImpl(
     private val logger = LoggerFactory.getLogger(this.javaClass)
     private lateinit var webSocket: WebSocketService
     private lateinit var webSocketScope: CoroutineScope
-    private val subscribers = ArrayList<(Any) -> Unit>()
+    private val subscribers = ArrayList<(Context) -> Unit>()
 
     override fun connect(useParentScope: Boolean) {
         try {
@@ -62,7 +63,7 @@ class PazzkImpl(
         return matchResult?.groups?.get(1)?.value
     }
 
-    override fun addListener(callback: (response: Any) -> Unit) {
+    override fun addListener(callback: (response: Context) -> Unit) {
         subscribers.add(callback)
     }
 

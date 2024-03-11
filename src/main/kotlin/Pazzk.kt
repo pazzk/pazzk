@@ -1,6 +1,7 @@
 package io.pazzk
 
 import io.pazzk.core.webclient.RestClient
+import io.pazzk.utils.Context
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -19,7 +20,7 @@ interface Pazzk {
         }
     }
 
-    fun addListener(callback: (response: Any) -> Unit)
+    fun addListener(callback: (response: Context) -> Unit)
 
     fun connect(useParentScope: Boolean = false)
 

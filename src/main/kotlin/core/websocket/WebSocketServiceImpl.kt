@@ -5,6 +5,9 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
 import io.ktor.websocket.*
+import io.pazzk.utils.Context
+import io.pazzk.utils.isInt
+import io.pazzk.utils.parseToContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -21,7 +24,7 @@ class WebSocketServiceImpl(
         install(WebSockets)
     }
 
-    private val messageChannel = Channel<String>(Channel.UNLIMITED)
+    private val messageChannel = Channel<Context>(Channel.UNLIMITED)
 
     override fun connect() {
         scope.launch {
@@ -41,7 +44,12 @@ class WebSocketServiceImpl(
             }) {
                 for (frame in incoming) {
                     if (frame is Frame.Text) {
-                        messageChannel.send(frame.readText())
+                        val message = frame.readText()
+                        if (message.isInt()) {
+                            continue
+                        }
+
+                        messageChannel.send(parseToContext(frame.readText()))
                     }
                 }
             }
@@ -53,7 +61,7 @@ class WebSocketServiceImpl(
         }
     }
 
-    override suspend fun subscribe(onMessageReceived: (String) -> Unit): Job {
+    override suspend fun subscribe(onMessageReceived: (Context) -> Unit): Job {
         return scope.launch {
             for (message in messageChannel) {
                 onMessageReceived(message)
