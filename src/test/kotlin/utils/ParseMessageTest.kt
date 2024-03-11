@@ -29,13 +29,24 @@ internal class ParseMessageTest {
     }
 
     @Test
-    fun testDonationMessage() {
+    fun testAnonymousDonationMessage() {
         val donationMessage =
-            "42[\"donation\", \"{\"donationId\":\"sample\",\"animationUrl\":\"sample.gif\",\"payAmount\":1000,\"donationText\":\"sample text\",\"type\":\"nmeow\",\"isAnonymous\":true,\"alertSoundUrl\":\"new_cheeze.mp3\",\"useSpeech\":true}\"]"
+            "42[\"donation\",\"{\\\"donationId\\\":\\\"1234567890qwertyuiopasdfghjkl\\\",\\\"animationUrl\\\":\\\"chat_donation_01.gif\\\",\\\"payAmount\\\":1000,\\\"donationText\\\":\\\"\\\",\\\"type\\\":\\\"nmeow\\\",\\\"isAnonymous\\\":true,\\\"alertSoundUrl\\\":\\\"https://ssl.pstatic.net/static/nng/glive/audio/new_cheeze.mp3\\\",\\\"useSpeech\\\":true}\"]"
 
         val message = parseToContext(donationMessage)
 
         assertThat(message).isInstanceOf(Donate::class.java)
+        println(message)
+    }
+
+    @Test
+    fun testUserDonationMessage() {
+        val donationMessage =
+            "42[\"donation\",\"{\\\"donationId\\\":\\\"lkjhgfdsapoiuytrewq0987654321\\\",\\\"animationUrl\\\":\\\"chat_donation_01.gif\\\",\\\"profile\\\":\\\"{\\\\\\\"userIdHash\\\\\\\":\\\\\\\"sampleHash\\\\\\\",\\\\\\\"nickname\\\\\\\":\\\\\\\"iqpizza6349\\\\\\\",\\\\\\\"profileImageUrl\\\\\\\":\\\\\\\"\\\\\\\",\\\\\\\"userRoleCode\\\\\\\":\\\\\\\"common_user\\\\\\\",\\\\\\\"badge\\\\\\\":null,\\\\\\\"title\\\\\\\":null,\\\\\\\"verifiedMark\\\\\\\":false,\\\\\\\"activityBadges\\\\\\\":[{\\\\\\\"badgeNo\\\\\\\":12345678,\\\\\\\"badgeId\\\\\\\":\\\\\\\"donation_newbie\\\\\\\",\\\\\\\"imageUrl\\\\\\\":\\\\\\\"fan.png\\\\\\\",\\\\\\\"activated\\\\\\\":true}],\\\\\\\"streamingProperty\\\\\\\":{\\\\\\\"realTimeDonationRanking\\\\\\\":{\\\\\\\"badge\\\\\\\":{\\\\\\\"imageUrl\\\\\\\":\\\\\\\"gold.png\\\\\\\"}}}}\\\",\\\"payAmount\\\":1000,\\\"donationText\\\":\\\"sample text\\\",\\\"type\\\":\\\"nmeow\\\",\\\"isAnonymous\\\":false,\\\"alertSoundUrl\\\":\\\"new_cheeze.mp3\\\",\\\"useSpeech\\\":true}\"]"
+
+        val message = parseToContext(donationMessage)
+
+        assertThat(message).isInstanceOf(Donate::class.java)
+        println(message)
     }
 }
-
