@@ -1,9 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.22"
+    id("org.jetbrains.dokka") version "1.9.20"
 }
-
-group = "io.pazzk"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -31,6 +29,28 @@ dependencies {
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
 }
 
+tasks.register<Jar>("dokkaHtmlJar") {
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("html-docs")
+}
+tasks.register<Jar>("dokkaJavadocJar") {
+    dependsOn(tasks.dokkaJavadoc)
+    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
+}
+tasks.dokkaHtml {
+    moduleName.set(project.name)
+    moduleVersion.set(project.version.toString())
+    failOnWarning.set(false)
+    suppressObviousFunctions.set(false)
+    suppressInheritedMembers.set(false)
+    offlineMode.set(false)
+    outputDirectory.set(layout.buildDirectory.dir("documentation/html"))
+}
+tasks.dokkaGfm {
+    outputDirectory.set(layout.buildDirectory.dir("documentation/markdown"))
+}
 tasks.test {
     useJUnitPlatform()
 }
