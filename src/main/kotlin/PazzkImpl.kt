@@ -1,6 +1,6 @@
 package io.pazzk
 
-import io.pazzk.core.webclient.WebClientService
+import io.pazzk.core.webclient.WebClient
 import io.pazzk.core.websocket.WebSocketService
 import io.pazzk.core.websocket.WebSocketServiceImpl
 import io.pazzk.utils.Context
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 class PazzkImpl(
-    private val webClient: WebClientService<Session>,
+    private val webClient: WebClient<Session>,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + Job())
 ) : Pazzk {
     private val logger = LoggerFactory.getLogger(this.javaClass)
