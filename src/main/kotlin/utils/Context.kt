@@ -8,8 +8,20 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.regex.Pattern
 
+/**
+ * This interface for *Marked Interface* to group data classes
+ */
 sealed interface Context
 
+/**
+ * A Donate with many donate information
+ *
+ * @property profile optional response type.
+ * Only returns for when sponsor(person who sponsored) has unchecked the
+ * 'anonymous'
+ * If sponsor checked 'anonymous', the profile will be null
+ * @constructor used by only data-binding from jackson
+ */
 data class Donate(
     val donationId: String,
     val animationUrl: String,
@@ -57,6 +69,15 @@ data class Badge(
     val imageUrl: String?
 )
 
+/**
+ * A Connection with Websocket Connect Information
+ *
+ * @property sid the unique number from connection
+ * @property upgrades not very useful, only returns 'websocket'
+ * @property pingInterval interval of ping milliseconds
+ * @property pingTimeout timeout of ping milliseconds
+ * @constructor used by only data-binding from jackson
+ */
 data class Connection(
     val sid: String,
     val upgrades: List<String>,
@@ -64,6 +85,12 @@ data class Connection(
     val pingTimeout: Int
 ): Context
 
+/**
+ * An Error with a reason.
+ *
+ * @property reason the reason of this error
+ * @constructor used by only data-binding from jackson
+ */
 data class Error(
     val reason: String
 ): Context

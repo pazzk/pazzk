@@ -24,6 +24,7 @@ class PazzkImpl(
         try {
             scope.launch {
                 val response = webClient.get()
+                // response code must be 200.
                 if (response?.code != 200) {
                     throw IllegalStateException(
                         "DonationId is not support in chzzk!"
@@ -31,8 +32,11 @@ class PazzkImpl(
                 }
 
                 val sessionUrl = response.content.sessionUrl
+                // parse websocket url and auth from session url
                 val (webSocketUrl, auth) = convertWebSocketUrl(sessionUrl)
-                logger.info("websocket url: {}", webSocketUrl)
+                if (logger.isDebugEnabled) {
+                    logger.debug("websocket url: {}", webSocketUrl)
+                }
 
                 webSocketScope = if (useParentScope) scope else CoroutineScope(scope.coroutineContext + Job())
                 webSocket = WebSocketServiceImpl(webSocketUrl, auth, webSocketScope)
@@ -52,13 +56,13 @@ class PazzkImpl(
         if (sessionUrl.startsWith("https")) {
             val websocketUrl = sessionUrl.replace("https", "wss")
                 .substring(0, sessionUrl.lastIndexOf(":") - 2)
-            return Pair(websocketUrl, getParamFrom(sessionUrl, "auth")!!)
+            return Pair(websocketUrl, getParamFrom(sessionUrl)!!)
         }
         throw IllegalArgumentException("$sessionUrl is not https url")
     }
 
-    private fun getParamFrom(url: String, paramName: String): String? {
-        val regex = """[?&]$paramName=([^&]+)""".toRegex()
+    private fun getParamFrom(url: String): String? {
+        val regex = """[?&]auth=([^&]+)""".toRegex()
         val matchResult = regex.find(url)
         return matchResult?.groups?.get(1)?.value
     }

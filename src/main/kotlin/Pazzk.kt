@@ -5,9 +5,13 @@ import io.pazzk.utils.Context
 import kotlinx.coroutines.CoroutineScope
 
 /**
- * 치지직의 후원 시스템, 치즈의 후원 알림을 받아올 수 있는 인터페이스(API)
+ * Chzzk sponsorship system, an interface (API) to receive sponsorship
+ * notifications from Cheese.
  *
- * @since 1.0
+ * When using, be sure to call it in the following order:
+ * > addListener -> connect -> disconnect
+ *
+ * Do not set connect first. well you can, but not really recommend
  */
 interface Pazzk {
     companion object {
@@ -20,10 +24,26 @@ interface Pazzk {
         }
     }
 
+    /**
+     * Add Listener(actually subscriber) that read about chzzk donation server
+     *
+     * @param callback define non-returnable implementation with using context
+     */
     fun addListener(callback: (response: Context) -> Unit)
 
+    /**
+     * Connect to chzzk donation server.
+     *
+     * @param useParentScope when is true, use scope from constructor
+     * when is false, use default scope
+     * default will be false
+     * @see CoroutineScope
+     */
     fun connect(useParentScope: Boolean = false)
 
+    /**
+     * Disconnect to chzzk donation server
+     */
     fun disconnect()
 
 }

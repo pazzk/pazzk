@@ -61,10 +61,10 @@ class WebSocketServiceImpl(
         }
     }
 
-    override suspend fun subscribe(onMessageReceived: (Context) -> Unit): Job {
+    override suspend fun subscribe(onReceived: (Context) -> Unit): Job {
         return scope.launch {
             for (message in messageChannel) {
-                onMessageReceived(message)
+                onReceived(message)
             }
         }
     }
